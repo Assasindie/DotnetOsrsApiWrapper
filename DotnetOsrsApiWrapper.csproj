@@ -6,6 +6,10 @@
     <Company />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>A simple wrapper for the osrs api.</Description>
+    <Version>1.0.2</Version>
+    <RepositoryUrl>https://github.com/Assasindie/DotnetOsrsApiWrapper</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
 </Project>
+  

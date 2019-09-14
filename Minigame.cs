@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DotnetOsrsApiWrapper
 {
-    class Minigame
+    public class Minigame
     {
         //do not re-order this or it will break it all
         public int Rank { get; set; }

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace DotnetOsrsApiWrapper
 {
-    class PlayerInfo
+    public class PlayerInfo
     {
         //intial states for the Skills/Minigames
         private static readonly Skill InitialSkillState = new Skill() { Rank = -1, Level = 1, Experience = 1 };

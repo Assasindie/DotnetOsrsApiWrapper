@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DotnetOsrsApiWrapper
 {
-    class Skill
+    public class Skill
     {
         //do not re-order this or it will break it all
         public int Rank { get; set; }
