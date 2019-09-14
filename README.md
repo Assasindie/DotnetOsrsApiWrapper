@@ -1,5 +1,9 @@
 # DotnetOsrsApiWrapper
 A .NET Wrapper for the OSRS highscores API
+# Installation
+https://www.nuget.org/packages/DotnetOsrsApiWrapper
+
+```Install-Package DotnetOsrsApiWrapper -Version 1.0.1```
 # Usage
 Initialize an instance of the class with the OSRS username.
 ```C#
