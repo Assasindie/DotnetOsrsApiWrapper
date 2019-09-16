@@ -3,11 +3,10 @@ A .NET Wrapper for the OSRS highscores API
 # Installation
 https://www.nuget.org/packages/DotnetOsrsApiWrapper
 
-```Install-Package DotnetOsrsApiWrapper -Version 1.0.1```
 # Usage
 Initialize an instance of the class with the OSRS username.
 ```C#
-PlayerInfo Player = PlayerInfo.GetPlayerStats("Assasindie");
+PlayerInfo Player = new PlayerInfo("Assasindie");
 ```
 Retrieve info about Player's Skills.
 ```C#
@@ -71,6 +70,8 @@ IEnumerable for Minigames
 foreach(Minigame minigame in Player.Minigames())
 {
      Console.WriteLine(minigame.Rank);
+     Console.WriteLine(minigame.Name);
+
 }
 ```
 IEnumerable for Skills
@@ -78,6 +79,7 @@ IEnumerable for Skills
 foreach(Skill skill in Player.Skills())
 {
      Console.WriteLine(skill.Level);
+     Console.WriteLine(skill.Name);
 }
 ```
 
