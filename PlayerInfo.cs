@@ -51,6 +51,55 @@ namespace DotnetOsrsApiWrapper
         public Minigame EliteClueScrolls { get; set; } = InitialMinigameState;
         public Minigame MasterClueScrolls { get; set; } = InitialMinigameState;
 
+        public PlayerInfo(string UserName)
+        {
+            this.Name = UserName;
+
+            HttpWebRequest req;
+            //request player info from jagex api
+            try
+            {
+                req = (HttpWebRequest)WebRequest.Create("https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=" + UserName);
+
+                StreamReader Response = new StreamReader(req.GetResponse().GetResponseStream());
+                //gets all the properties of the PlayerInfo class
+                PropertyInfo[] properties = typeof(PlayerInfo).GetProperties();
+                foreach (PropertyInfo info in properties)
+                {
+                    //checks the PropertyType of the current Property and sets the value accordingly.
+                    if (info.PropertyType == typeof(Skill))
+                    {
+                        string[] values = Response.ReadLine().Split(',');
+                        info.SetValue(this, new Skill
+                        {
+                            Name = info.Name,
+                            Rank = int.Parse(values[0]),
+                            Level = int.Parse(values[1]),
+                            Experience = int.Parse(values[2])
+                        });
+                    }
+
+                    if (info.PropertyType == typeof(Minigame))
+                    {
+                        string[] values = Response.ReadLine().Split(',');
+                        info.SetValue(this, new Minigame
+                        {
+                            Name = info.Name,
+                            Rank = int.Parse(values[0]),
+                            Score = int.Parse(values[1]),
+
+                        });
+                    }
+                }
+                Response.Dispose();
+            }
+            catch
+            {
+                //return a PlayerInfo with the initial values because the player name could not be found.
+                return;
+            }
+        }
+
         //returns all info in a big string.
         public string GetAllValuesToString()
         {
@@ -100,53 +149,6 @@ namespace DotnetOsrsApiWrapper
                 yield return skill;
             }
         }
-
-        public static PlayerInfo GetPlayerStats(string PlayerName)
-        {
-            HttpWebRequest req;
-            //request player info from jagex api
-            try
-            {
-                req = (HttpWebRequest)WebRequest.Create("https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=" + PlayerName);
-            }
-            catch
-            {
-                //return a PlayerInfo with the initial values because the player name could not be found.
-                return new PlayerInfo() { Name = PlayerName };
-            }
-
-            StreamReader Response = new StreamReader(req.GetResponse().GetResponseStream());
-            PlayerInfo Player = new PlayerInfo() { Name = PlayerName };
-            //gets all the properties of the PlayerInfo class
-            PropertyInfo[] properties = typeof(PlayerInfo).GetProperties();
-            foreach (PropertyInfo info in properties)
-            {
-                //checks the PropertyType of the current Property and sets the value accordingly.
-                if (info.PropertyType == typeof(Skill))
-                {
-                    string[] values = Response.ReadLine().Split(',');
-                    info.SetValue(Player, new Skill
-                    {
-                        Rank = int.Parse(values[0]),
-                        Level = int.Parse(values[1]),
-                        Experience = int.Parse(values[2])
-                    });
-                }
-
-                if (info.PropertyType == typeof(Minigame))
-                {
-                    string[] values = Response.ReadLine().Split(',');
-                    info.SetValue(Player, new Minigame
-                    {
-                        Rank = int.Parse(values[0]),
-                        Score = int.Parse(values[1]),
-
-                    });
-                }
-            }
-            Response.Dispose();
-            return Player;
-        }
     }
-
 }
+
