@@ -11,8 +11,8 @@ namespace DotnetOsrsApiWrapper
     public class PlayerInfo
     {
         //intial states for the Skills/Minigames
-        private static readonly Skill InitialSkillState = new Skill() { Rank = -1, Level = 1, Experience = 1 };
-        private static readonly Minigame InitialMinigameState = new Minigame() { Rank = -1, Score = -1 };
+        private static readonly Skill InitialSkillState = new Skill { Rank = -1, Level = 1, Experience = 1 };
+        private static readonly Minigame InitialMinigameState = new Minigame { Rank = -1, Score = -1 };
 
         //do not re-order this or it will break it all
         public string Name { get; set; } = "";
@@ -53,7 +53,7 @@ namespace DotnetOsrsApiWrapper
 
         public PlayerInfo(string UserName)
         {
-            this.Name = UserName;
+            Name = UserName;
 
             HttpWebRequest req;
             //request player info from jagex api
@@ -93,11 +93,7 @@ namespace DotnetOsrsApiWrapper
                 }
                 Response.Dispose();
             }
-            catch
-            {
-                //return a PlayerInfo with the initial values because the player name could not be found.
-                return;
-            }
+            catch { }
         }
 
         //returns all info in a big string.
