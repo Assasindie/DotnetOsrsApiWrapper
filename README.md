@@ -67,10 +67,10 @@ MasterClueScrolls : Rank : 7456, Score : 50,
 ```
 IEnumerable for Minigames
 ```C#
-foreach(Minigame minigame in Player.Minigames())
+foreach(Activity activity in Player.Minigames())
 {
-     Console.WriteLine(minigame.Rank);
-     Console.WriteLine(minigame.Name);
+     Console.WriteLine(activity.Rank);
+     Console.WriteLine(activity.Name);
 
 }
 ```
