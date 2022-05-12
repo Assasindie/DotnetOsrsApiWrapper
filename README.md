@@ -3,6 +3,19 @@ A .NET Wrapper for the OSRS highscores API
 # Installation
 https://www.nuget.org/packages/DotnetOsrsApiWrapper
 
+# Updates
+This package is no longer actively maintained, as a result some stats may be displaying incorrectly as more bosses and minigames are added.
+
+Updating the package is rather simple, you just need to add the new skill (if one ever comes out) and/or Activity (boss/minigame) in the correct order it appears from the API. The order can be found here https://runescape.wiki/w/Application_programming_interface#Hiscores_Lite_2 .
+You just need to add the new field to the PlayerInfo class in the appropiate spot and the package will take care of the rest.
+
+Eg adding a new bosses called Zulrah2 and Zul that appears after and before zulrah respectively in the API list is as simple as editing PlayerInfo to be 
+```C#
+public Activity Zul { get; set; } = InitialActivityState;
+public Activity Zulrah { get; set; } = InitialActivityState;
+public Activity Zulrah2 { get; set; } = InitialActivityState;
+```
+
 # Usage
 Initialize an instance of the class with the OSRS username.
 ```C#
