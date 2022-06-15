@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DotnetOsrsApiWrapper
 {
-    public class PlayerInfoService
+    public class PlayerInfoService : IPlayerInfoService
     {
         private readonly HttpClient _httpClient;
 
@@ -54,7 +54,8 @@ namespace DotnetOsrsApiWrapper
                         });
                     }
                 }
-            } catch { }
+            }
+            catch { }
 
             return playerInfo;
         }

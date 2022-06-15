@@ -1,11 +1,15 @@
 # DotnetOsrsApiWrapper
-A .NET Wrapper for the OSRS highscores API
+A .NET Wrapper for the OSRS highscores API. This is a fork of Assasindie's repository, intended to refactor some aspects of the original code such as:
+- Moving parser code to a Service class, allowing PlayerInfo to act more like a Domain Object
+- Injecting HttpClient into the Service, for improved testability
+- Use of async for non-blocking code
+
+I intend to use these changes for another project I have been working on, so am planning to keep it up-to-date when new Activities and/or Skills are added to the game.
+
 # Installation
-https://www.nuget.org/packages/DotnetOsrsApiWrapper
+Coming soon...
 
 # Updates
-This package is no longer actively maintained, as a result some stats may be displaying incorrectly as more bosses and minigames are added.
-
 Updating the package is rather simple, you just need to add the new skill (if one ever comes out) and/or Activity (boss/minigame) in the correct order it appears from the API. The order can be found here https://runescape.wiki/w/Application_programming_interface#Hiscores_Lite_2 .
 You just need to add the new field to the PlayerInfo class in the appropiate spot and the package will take care of the rest.
 

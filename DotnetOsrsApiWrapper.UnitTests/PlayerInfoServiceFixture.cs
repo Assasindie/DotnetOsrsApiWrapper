@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Net.Http;
@@ -27,6 +28,15 @@ namespace DotnetOsrsApiWrapper.UnitTests
         public async Task GetPlayerInfoAsync_ReturnsPlayerInfo()
         {
             var response = await _service.GetPlayerInfoAsync("Worstjibs");
+        }
+
+        [TestMethod]
+        public async Task ExtensionMethod_WorksCorrectly()
+        {
+            var service = new ServiceCollection().AddOsrsWrapper()
+                .BuildServiceProvider().GetRequiredService<IPlayerInfoService>();
+
+            var response = await service.GetPlayerInfoAsync("Worstjibs");
         }
     }
 }
