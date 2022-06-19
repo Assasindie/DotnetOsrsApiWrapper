@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DotnetOsrsApiWrapper
 {
-    public class Skill
+    public class Skill : IPlayerInfoProperty
     {
         //do not re-order this or it will break it all
         public string Name { get; set;}
