@@ -3,6 +3,7 @@ A .NET Wrapper for the OSRS highscores API. This is a fork of Assasindie's repos
 - Moving parser code to a Service class, allowing PlayerInfo to act more like a Domain Object
 - Injecting HttpClient into the Service, for improved testability
 - Use of async for non-blocking code
+- IEnumerable result method to fetch Multiple Usernames
 
 I intend to use these changes for another project I have been working on, so am planning to keep it up-to-date when new Activities and/or Skills are added to the game.
 
@@ -21,11 +22,23 @@ public Activity Zulrah2 { get; set; } = InitialActivityState;
 ```
 
 # Usage
-Initialize an instance of the class with the OSRS username.
+The API processing code has now been moved to PlayerInfoService. You will need to pass in an instance of HttpClient to call out to the OSRS Hiscores API. They are also Async, so you will need to await the call to use the result.
 ```C#
-PlayerInfo Player = new PlayerInfo("Assasindie");
+var service = new PlayerInfoService(new HttpClient());
+// Single Username
+PlayerInfo playerInfo = await service.GetPlayerInfoAsync("Worstjibs");
+// Multiple Usernames
+IEnumerable<PlayerInfo> playerInfoList = await service.GetPlayerInfoAsync(new[] { "Worstjibs", "Assasindie" });
 ```
-Retrieve info about Player's Skills.
+If you are using IServiceCollection DI Container, you can inject a Scoped instance of PlayerInfoService to your container using this extension method.
+```C#
+public void ConfigureServices(IServiceCollection services) {
+     services.AddOsrsWrapper();
+}
+```
+Then inject the wrapper into your registered services using the `IPlayerInfoService` interface, allowing for cleaner unit testing.
+
+Once you retrieve a `PlayerInfo` result from the service, you can access Hiscore information from the object.
 ```C#
 // Retrieve a specific Skill's Level.
 public int SlayerLevel = Player.Slayer.Level;

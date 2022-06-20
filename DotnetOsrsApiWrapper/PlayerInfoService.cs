@@ -27,17 +27,8 @@ namespace DotnetOsrsApiWrapper
 
         public async Task<IEnumerable<PlayerInfo>> GetPlayerInfoAsync(string[] userNames)
         {
-            var playerInfoList = new List<PlayerInfo>();
-
-            foreach (var userName in userNames)
-            {
-                var response = await _httpClient.GetAsync("https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=" + userName);
-                response.EnsureSuccessStatusCode();
-
-                playerInfoList.Add(await ParseHttpResponse(userName, response));
-            }
-
-            return playerInfoList;
+            var tasks = userNames.Select(x => GetPlayerInfoAsync(x));
+            return await Task.WhenAll(tasks);
         }
 
         private async Task<PlayerInfo> ParseHttpResponse(string userName, HttpResponseMessage response)
