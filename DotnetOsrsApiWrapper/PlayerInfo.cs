@@ -11,8 +11,8 @@ namespace DotnetOsrsApiWrapper
     public class PlayerInfo
     {
         //intial states for the Skills/Minigames
-        private static readonly Skill InitialSkillState = new() { Rank = -1, Level = 1, Experience = 1 };
-        private static readonly Activity InitialActivityState = new() { Rank = -1, Score = -1 };
+        private static readonly Skill InitialSkillState = new Skill { Rank = -1, Level = 1, Experience = 1 };
+        private static readonly Activity InitialActivityState = new Activity { Rank = -1, Score = -1 };
 
         //do not re-order this or it will break it all
         public string Name { get; set; } = "";
