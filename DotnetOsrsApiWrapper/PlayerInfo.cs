@@ -85,8 +85,8 @@ namespace DotnetOsrsApiWrapper
         public Activity Kril { get; set; } = InitialActivityState;
         public Activity Mimic { get; set; } = InitialActivityState;
         public Activity Nex { get; set; } = InitialActivityState;
-        public Activity PhosanisNightmare { get; set; } = InitialActivityState;
         public Activity Nightmare { get; set; } = InitialActivityState;
+        public Activity PhosanisNightmare { get; set; } = InitialActivityState;
         public Activity Obor { get; set; } = InitialActivityState;
         public Activity Sarachnis { get; set; } = InitialActivityState;
         public Activity Scorpia { get; set; } = InitialActivityState;
@@ -95,6 +95,7 @@ namespace DotnetOsrsApiWrapper
         public Activity Gauntlet { get; set; } = InitialActivityState;
         public Activity CorruptedGauntlet { get; set; } = InitialActivityState;
         public Activity TheatreofBlood { get; set; } = InitialActivityState;
+        public Activity TheatreofBloodHardMode { get; set; } = InitialActivityState;
         public Activity ThermonuclearSmokeDevil { get; set; } = InitialActivityState;
         public Activity Zuk { get; set; } = InitialActivityState;
         public Activity Jad { get; set; } = InitialActivityState;
