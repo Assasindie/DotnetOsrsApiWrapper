@@ -1,14 +1,8 @@
 # DotnetOsrsApiWrapper
-A .NET Wrapper for the OSRS highscores API. This is a fork of Assasindie's repository, intended to refactor some aspects of the original code such as:
-- Moving parser code to a Service class, allowing PlayerInfo to act more like a Domain Object
-- Injecting HttpClient into the Service, for improved testability
-- Use of async for non-blocking code
-- IEnumerable result method to fetch Multiple Usernames
-
-I intend to use these changes for another project I have been working on, so am planning to keep it up-to-date when new Activities and/or Skills are added to the game.
+A .NET Wrapper for the OSRS highscores API.
 
 # Installation
-Coming soon...
+https://www.nuget.org/packages/DotnetOsrsApiWrapper
 
 # Updates
 Updating the package is rather simple, you just need to add the new skill (if one ever comes out) and/or Activity (boss/minigame) in the correct order it appears from the API. The order can be found here https://runescape.wiki/w/Application_programming_interface#Hiscores_Lite_2 .
@@ -22,7 +16,7 @@ public Activity Zulrah2 { get; set; } = InitialActivityState;
 ```
 
 # Usage
-The API processing code has now been moved to PlayerInfoService. You will need to pass in an instance of HttpClient to call out to the OSRS Hiscores API. They are also Async, so you will need to await the call to use the result.
+The API processing code has now been moved to PlayerInfoService. You will need to pass in an instance of HttpClient to call out to the OSRS Hiscores API. They calls are Async, so you will need to await the call to use the result.
 ```C#
 var service = new PlayerInfoService(new HttpClient());
 // Single Username
