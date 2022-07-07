@@ -1,11 +1,10 @@
 # DotnetOsrsApiWrapper
-A .NET Wrapper for the OSRS highscores API
+A .NET Wrapper for the OSRS highscores API.
+
 # Installation
 https://www.nuget.org/packages/DotnetOsrsApiWrapper
 
 # Updates
-This package is no longer actively maintained, as a result some stats may be displaying incorrectly as more bosses and minigames are added.
-
 Updating the package is rather simple, you just need to add the new skill (if one ever comes out) and/or Activity (boss/minigame) in the correct order it appears from the API. The order can be found here https://runescape.wiki/w/Application_programming_interface#Hiscores_Lite_2 .
 You just need to add the new field to the PlayerInfo class in the appropiate spot and the package will take care of the rest.
 
@@ -17,11 +16,23 @@ public Activity Zulrah2 { get; set; } = InitialActivityState;
 ```
 
 # Usage
-Initialize an instance of the class with the OSRS username.
+The API processing code has now been moved to PlayerInfoService. You will need to pass in an instance of HttpClient to call out to the OSRS Hiscores API. They calls are Async, so you will need to await the call to use the result.
 ```C#
-PlayerInfo Player = new PlayerInfo("Assasindie");
+var service = new PlayerInfoService(new HttpClient());
+// Single Username
+PlayerInfo playerInfo = await service.GetPlayerInfoAsync("Worstjibs");
+// Multiple Usernames
+IEnumerable<PlayerInfo> playerInfoList = await service.GetPlayerInfoAsync(new[] { "Worstjibs", "Assasindie" });
 ```
-Retrieve info about Player's Skills.
+If you are using IServiceCollection DI Container, you can inject a Scoped instance of PlayerInfoService to your container using this extension method.
+```C#
+public void ConfigureServices(IServiceCollection services) {
+     services.AddOsrsWrapper();
+}
+```
+Then inject the wrapper into your registered services using the `IPlayerInfoService` interface, allowing for cleaner unit testing.
+
+Once you retrieve a `PlayerInfo` result from the service, you can access Hiscore information from the object.
 ```C#
 // Retrieve a specific Skill's Level.
 public int SlayerLevel = Player.Slayer.Level;

@@ -4,11 +4,12 @@ using System.Text;
 
 namespace DotnetOsrsApiWrapper
 {
-    public class Activity
+    public class Skill : IPlayerInfoProperty
     {
         //do not re-order this or it will break it all
-        public string Name { get; set; }
+        public string Name { get; set;}
         public int Rank { get; set; }
-        public int Score { get; set; }
+        public int Level { get; set; }
+        public int Experience { get; set; }
     }
 }

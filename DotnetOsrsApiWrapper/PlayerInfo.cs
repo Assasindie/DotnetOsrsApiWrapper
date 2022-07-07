@@ -40,6 +40,7 @@ namespace DotnetOsrsApiWrapper
         public Skill Runecrafting { get; set; } = InitialSkillState;
         public Skill Hunter { get; set; } = InitialSkillState;
         public Skill Construction { get; set; } = InitialSkillState;
+
         //minigames
         public Activity LeaguePoints { get; set; } = InitialActivityState;
         public Activity BountyHunterRogues { get; set; } = InitialActivityState;
@@ -53,6 +54,8 @@ namespace DotnetOsrsApiWrapper
         public Activity MasterClueScrolls { get; set; } = InitialActivityState;
         public Activity LastManStanding { get; set; } = InitialActivityState;
         public Activity SoulWarsZeal { get; set; } = InitialActivityState;
+        public Activity RiftsClosed { get; set; } = InitialActivityState;
+
         //bosses
         public Activity AbyssalSire { get; set; } = InitialActivityState;
         public Activity AlchemicalHydra { get; set; } = InitialActivityState;
@@ -81,7 +84,9 @@ namespace DotnetOsrsApiWrapper
         public Activity Kree { get; set; } = InitialActivityState;
         public Activity Kril { get; set; } = InitialActivityState;
         public Activity Mimic { get; set; } = InitialActivityState;
+        public Activity Nex { get; set; } = InitialActivityState;
         public Activity Nightmare { get; set; } = InitialActivityState;
+        public Activity PhosanisNightmare { get; set; } = InitialActivityState;
         public Activity Obor { get; set; } = InitialActivityState;
         public Activity Sarachnis { get; set; } = InitialActivityState;
         public Activity Scorpia { get; set; } = InitialActivityState;
@@ -90,6 +95,7 @@ namespace DotnetOsrsApiWrapper
         public Activity Gauntlet { get; set; } = InitialActivityState;
         public Activity CorruptedGauntlet { get; set; } = InitialActivityState;
         public Activity TheatreofBlood { get; set; } = InitialActivityState;
+        public Activity TheatreofBloodHardMode { get; set; } = InitialActivityState;
         public Activity ThermonuclearSmokeDevil { get; set; } = InitialActivityState;
         public Activity Zuk { get; set; } = InitialActivityState;
         public Activity Jad { get; set; } = InitialActivityState;
@@ -100,51 +106,7 @@ namespace DotnetOsrsApiWrapper
         public Activity Zalcano { get; set; } = InitialActivityState;
         public Activity Zulrah { get; set; } = InitialActivityState;
 
-
-        public PlayerInfo(string UserName)
-        {
-            Name = UserName;
-
-            HttpWebRequest req;
-            //request player info from jagex api
-            try
-            {
-                req = (HttpWebRequest)WebRequest.Create("https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=" + UserName);
-
-                StreamReader Response = new StreamReader(req.GetResponse().GetResponseStream());
-                //gets all the properties of the PlayerInfo class
-                PropertyInfo[] properties = typeof(PlayerInfo).GetProperties();
-                foreach (PropertyInfo info in properties)
-                {
-                    //checks the PropertyType of the current Property and sets the value accordingly.
-                    if (info.PropertyType == typeof(Skill))
-                    {
-                        string[] values = Response.ReadLine().Split(',');
-                        info.SetValue(this, new Skill
-                        {
-                            Name = info.Name,
-                            Rank = int.Parse(values[0]),
-                            Level = int.Parse(values[1]),
-                            Experience = int.Parse(values[2])
-                        });
-                    }
-
-                    if (info.PropertyType == typeof(Activity))
-                    {
-                        string[] values = Response.ReadLine().Split(',');
-                        info.SetValue(this, new Activity
-                        {
-                            Name = info.Name,
-                            Rank = int.Parse(values[0]),
-                            Score = int.Parse(values[1]),
-
-                        });
-                    }
-                }
-                Response.Dispose();
-            }
-            catch { }
-        }
+        internal PlayerInfo() { }
 
         //returns all info in a big string.
         public string GetAllValuesToString()
