@@ -53,6 +53,7 @@ namespace DotnetOsrsApiWrapper
         public Activity EliteClueScrolls { get; set; } = InitialActivityState;
         public Activity MasterClueScrolls { get; set; } = InitialActivityState;
         public Activity LastManStanding { get; set; } = InitialActivityState;
+        public Activity PvPArena { get; set; } = InitialActivityState;
         public Activity SoulWarsZeal { get; set; } = InitialActivityState;
         public Activity RiftsClosed { get; set; } = InitialActivityState;
 
