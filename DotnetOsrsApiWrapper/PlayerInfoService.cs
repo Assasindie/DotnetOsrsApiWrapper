@@ -11,10 +11,18 @@ namespace DotnetOsrsApiWrapper
     public class PlayerInfoService : IPlayerInfoService
     {
         private readonly HttpClient _httpClient;
+        private bool _throwMismatchException;
 
-        public PlayerInfoService(HttpClient httpClient)
+        internal bool ThrowMismatchException
+        {
+            get => _throwMismatchException;
+            set => _throwMismatchException = value;
+        }
+
+        public PlayerInfoService(HttpClient httpClient, bool throwMismatchException = true)
         {
             _httpClient = httpClient;
+            _throwMismatchException = throwMismatchException;
         }
 
         public async Task<PlayerInfo> GetPlayerInfoAsync(string userName)
@@ -35,23 +43,35 @@ namespace DotnetOsrsApiWrapper
         {
             var playerInfo = new PlayerInfo { Name = userName };
 
-            using var reader = new StreamReader(await response.Content.ReadAsStreamAsync());
+            var stream = await response.Content.ReadAsStreamAsync();
 
-            try
+            using var reader = new StreamReader(stream);
+
+            var properties = typeof(PlayerInfo).GetProperties()
+                .Where(x => new[] { typeof(Activity), typeof(Skill) }.Contains(x.PropertyType));
+
+            if (properties.Count() != TotalLines(reader) && _throwMismatchException)
+                throw new FormatException("Property mismatch; OSRS API Contains more properties than PlayerInfo class. Please contact Repository creator");
+
+            foreach (PropertyInfo info in properties)
             {
-                var properties = typeof(PlayerInfo).GetProperties()
-                    .Where(x => new[] { typeof(Activity), typeof(Skill) }.Contains(x.PropertyType));
+                string[] values = reader.ReadLine().Split(',');
+                var property = ParseLine(values, info);
 
-                foreach (PropertyInfo info in properties)
-                {
-                    string[] values = reader.ReadLine().Split(',');
-                    var property = ParseLine(values, info);
-
-                    info.SetValue(playerInfo, property);
-                }
-            } catch { }
+                info.SetValue(playerInfo, property);
+            }
 
             return playerInfo;
+        }
+
+        private int TotalLines(StreamReader reader)
+        {
+            int i = 0;
+            while (reader.ReadLine() != null) i++;
+
+            reader.BaseStream.Position = 0;
+
+            return i;
         }
 
         private IPlayerInfoProperty ParseLine(string[] data, PropertyInfo info)

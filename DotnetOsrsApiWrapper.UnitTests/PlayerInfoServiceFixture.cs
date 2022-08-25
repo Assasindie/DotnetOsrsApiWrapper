@@ -20,7 +20,7 @@ namespace DotnetOsrsApiWrapper.UnitTests
         private Mock<HttpMessageHandler> _messageHandler;
         private HttpClient _httpClient;
 
-        private IPlayerInfoService _service;
+        private PlayerInfoService _service;
 
         [TestInitialize]
         public void BeforeTest()
@@ -28,7 +28,7 @@ namespace DotnetOsrsApiWrapper.UnitTests
             _messageHandler = new Mock<HttpMessageHandler>();
             _httpClient = new HttpClient(_messageHandler.Object);
 
-            _service = new PlayerInfoService(_httpClient);
+            _service = new PlayerInfoService(_httpClient, true);
         }
 
         [TestMethod]
@@ -56,7 +56,7 @@ namespace DotnetOsrsApiWrapper.UnitTests
             var userName = "Worstjibs";
 
             // Act
-            var playerInfo = await _service.GetPlayerInfoAsync("Worstjibs");
+            var playerInfo = await _service.GetPlayerInfoAsync(userName);
 
             // Assert
             Assert.AreEqual(userName, playerInfo.Name);
@@ -75,6 +75,35 @@ namespace DotnetOsrsApiWrapper.UnitTests
 
             // Act / Assert
             await Assert.ThrowsExceptionAsync<HttpRequestException>(() => _service.GetPlayerInfoAsync("Worstjibs"));
+        }
+
+        [TestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public async Task GetPlayerInfoAsync_ThrowsAnException_WhenPropertyMismatchOccurs(bool throwException)
+        {
+            // This test aims to relicate a scenario in which Jagex adds a new Activity or Skill to the Hiscores
+
+            // Arrange
+            var randomSkills = GenerateSkillData();
+            var randomActivities = GenerateActivityData();
+            randomActivities.Add(new Activity { Name = "Wintertodt 2" }); // Add a new Activity
+
+            _service.ThrowMismatchException = throwException;
+
+            var csvString = GenerateCSV(randomSkills, randomActivities);
+
+            _messageHandler.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .Returns((HttpRequestMessage request, CancellationToken cancellationToken) => GetResponseMessage(csvString));
+
+            // Act / Assert
+            if (throwException)
+            {
+                await Assert.ThrowsExceptionAsync<FormatException>(() => _service.GetPlayerInfoAsync("Worstjibs"));
+            } else
+            {
+                Assert.IsNotNull(await _service.GetPlayerInfoAsync("Worstjibs"));
+            }
         }
 
         [TestMethod]
@@ -137,7 +166,7 @@ namespace DotnetOsrsApiWrapper.UnitTests
             }
         }
 
-        private IEnumerable<Skill> GenerateSkillData()
+        private List<Skill> GenerateSkillData()
         {
             var random = new Random();
 
@@ -152,7 +181,7 @@ namespace DotnetOsrsApiWrapper.UnitTests
                 }).ToList();
         }
 
-        private IEnumerable<Activity> GenerateActivityData()
+        private List<Activity> GenerateActivityData()
         {
             var random = new Random();
 

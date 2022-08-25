@@ -98,6 +98,8 @@ namespace DotnetOsrsApiWrapper
         public Activity TheatreofBlood { get; set; } = InitialActivityState;
         public Activity TheatreofBloodHardMode { get; set; } = InitialActivityState;
         public Activity ThermonuclearSmokeDevil { get; set; } = InitialActivityState;
+        public Activity TombsOfAmascut { get; set; } = InitialActivityState;
+        public Activity TombsOfAmascutExpertMode { get; set; } = InitialActivityState;
         public Activity Zuk { get; set; } = InitialActivityState;
         public Activity Jad { get; set; } = InitialActivityState;
         public Activity Venenatis { get; set; } = InitialActivityState;

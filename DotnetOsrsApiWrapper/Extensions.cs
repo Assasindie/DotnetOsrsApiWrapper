@@ -14,11 +14,11 @@ namespace DotnetOsrsApiWrapper
         /// Registers PlayerInfoService, along with an associated HttpClient
         /// </summary>
         /// <param name="services">The IServiceCollection DI Container</param>
+        /// <param name="throwMismatchException">Controls whether an exception is thrown from the service when there is a mismatch of properties between PlayerInfo and the API</param>
         /// <returns></returns>
-        public static IServiceCollection AddOsrsWrapper(this IServiceCollection services)
+        public static IServiceCollection AddOsrsWrapper(this IServiceCollection services, bool throwMismatchException = true)
         {
-            services.AddScoped<IPlayerInfoService, PlayerInfoService>();
-            services.AddHttpClient<IPlayerInfoService, PlayerInfoService>();
+            services.AddHttpClient<IPlayerInfoService, PlayerInfoService>(x => new PlayerInfoService(x, throwMismatchException));
 
             return services;
         }

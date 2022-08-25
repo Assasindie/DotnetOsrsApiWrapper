@@ -16,7 +16,7 @@ public Activity Zulrah2 { get; set; } = InitialActivityState;
 ```
 
 # Usage
-The API processing code has now been moved to PlayerInfoService. You will need to pass in an instance of HttpClient to call out to the OSRS Hiscores API. They calls are Async, so you will need to await the call to use the result.
+The API processing code has now been moved to PlayerInfoService. You will need to pass in an instance of HttpClient to call out to the OSRS Hiscores API. The calls are Async, so you will need to await the call to use the result.
 ```C#
 var service = new PlayerInfoService(new HttpClient());
 // Single Username
@@ -31,6 +31,31 @@ public void ConfigureServices(IServiceCollection services) {
 }
 ```
 Then inject the wrapper into your registered services using the `IPlayerInfoService` interface, allowing for cleaner unit testing.
+
+You can also control whether an exception is thrown from the service when there is a property mismatch between PlayerInfo and the OSRS API. This is particularly useful when Jagex releases a new activity and you don\'t want to compromise data integrity until this package is updated. By default, this is set to true.
+
+```C#
+// Enable exception throwing on property mismatch. The service will fail until PlayerInfo is updated with the new Skill/Activity.
+
+// Using DI
+public void ConfigureServices(IServiceCollection services) {
+     services.AddOsrsWrapper(true);
+}
+// Using Constructor
+var service = new PlayerInfoService(new HttpClient(), true);
+
+
+// Disable exception throwing on property mismatch. The service will return a PlayerInfo object, but the Skills/Activities will be out of order/incorrect. You may compromise data integrity by disabling this, but no exceptions will be thrown.
+
+// Using DI
+public void ConfigureServices(IServiceCollection services) {
+     services.AddOsrsWrapper(true);
+}
+// Using Constructor
+var service = new PlayerInfoService(new HttpClient(), true);
+```
+
+A good approach would be to use this in tandem with `IConfiguration`, so that if required, the service can continue without code change by simply toggling a property in `appsettings.json` from true to false.
 
 Once you retrieve a `PlayerInfo` result from the service, you can access Hiscore information from the object.
 ```C#
@@ -95,7 +120,6 @@ foreach(Activity activity in Player.Minigames())
 {
      Console.WriteLine(activity.Rank);
      Console.WriteLine(activity.Name);
-
 }
 ```
 IEnumerable for Skills
