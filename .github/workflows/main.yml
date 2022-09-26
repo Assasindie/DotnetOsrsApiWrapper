@@ -1,0 +1,23 @@
+name: publish to nuget
+on:
+  push:
+    branches:
+      - master 
+jobs:
+  publish:
+    name: build, pack & publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # Publish
+      - name: publish on version change
+        id: publish_nuget
+        uses: alirezanet/publish-nuget@v3.0.4
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: NugetTest/NugetTest.csproj
+          
+          NUGET_KEY: ${{secrets.NUGET_KEY}}
+          
+          VERSION_REGEX: ^\s*<Version>(.*)<\/Version>\s*$
