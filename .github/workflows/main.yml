@@ -16,7 +16,7 @@ jobs:
         uses: alirezanet/publish-nuget@v3.0.4
         with:
           # Filepath of the project to be packaged, relative to root of repository
-          PROJECT_FILE_PATH: NugetTest/NugetTest.csproj
+          PROJECT_FILE_PATH: DotnetOsrsApiWrapper/DotnetOsrsApiWrapper.csproj
           
           NUGET_KEY: ${{secrets.NUGET_KEY}}
           
