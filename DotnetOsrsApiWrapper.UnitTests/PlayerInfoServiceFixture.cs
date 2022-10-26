@@ -64,7 +64,28 @@ namespace DotnetOsrsApiWrapper.UnitTests
         }
 
         [TestMethod]
-        public async Task GetPlayerInfoAsync_ThrowsAnException_WhenApiCallIsUnsuccessful()
+        public async Task GetPlayerInfoAsync_SetsStatusToSuccess()
+        {
+            // Arrange
+            var randomSkills = GenerateSkillData();
+            var randomActivities = GenerateActivityData();
+
+            var csvString = GenerateCSV(randomSkills, randomActivities);
+
+            _messageHandler.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .Returns((HttpRequestMessage request, CancellationToken cancellationToken) => GetResponseMessage(csvString));
+
+            var userName = "Worstjibs";
+
+            // Act
+            var playerInfo = await _service.GetPlayerInfoAsync(userName);
+
+            // Assert
+            Assert.AreEqual(PlayerInfoStatus.Success, playerInfo.Status);
+        }
+
+        [TestMethod]
+        public async Task GetPlayerInfoAsync_SetsStatusToNotFound_WhenHttpClientReturnsNotFound()
         {
             // Arrange
             _messageHandler.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
@@ -73,8 +94,11 @@ namespace DotnetOsrsApiWrapper.UnitTests
                     StatusCode = HttpStatusCode.NotFound
                 }));
 
-            // Act / Assert
-            await Assert.ThrowsExceptionAsync<HttpRequestException>(() => _service.GetPlayerInfoAsync("Worstjibs"));
+            // Act
+            var result = await _service.GetPlayerInfoAsync("Worstjibs");
+
+            // Assert
+            Assert.AreEqual(PlayerInfoStatus.NotFound, result.Status);
         }
 
         [TestMethod]

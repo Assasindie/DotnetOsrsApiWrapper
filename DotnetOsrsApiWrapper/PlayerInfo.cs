@@ -16,6 +16,7 @@ namespace DotnetOsrsApiWrapper
 
         //do not re-order this or it will break it all
         public string Name { get; set; } = "";
+        public PlayerInfoStatus Status { get; internal set; } = PlayerInfoStatus.Unknown;
         public Skill Overall { get; set; } = InitialSkillState;
         public Skill Attack { get; set; } = InitialSkillState;
         public Skill Defence { get; set; } = InitialSkillState;
