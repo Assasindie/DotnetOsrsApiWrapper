@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -27,28 +28,37 @@ namespace DotnetOsrsApiWrapper
 
         public async Task<PlayerInfo> GetPlayerInfoAsync(string userName)
         {
-            var response = await _httpClient.GetAsync("https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=" + userName);
-            response.EnsureSuccessStatusCode();
+            var playerInfo = new PlayerInfo { Name = userName };
 
-            return await ParseHttpResponse(userName, response);
+            var response = await _httpClient.GetAsync("https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=" + userName)
+                .ConfigureAwait(false);
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                playerInfo.Status = PlayerInfoStatus.NotFound;
+                return playerInfo;
+            }
+
+            return await ParseHttpResponse(playerInfo, response)
+                .ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<PlayerInfo>> GetPlayerInfoAsync(string[] userNames)
         {
             var tasks = userNames.Select(x => GetPlayerInfoAsync(x));
-            return await Task.WhenAll(tasks);
+            return await Task.WhenAll(tasks)
+                .ConfigureAwait(false);
         }
 
-        private async Task<PlayerInfo> ParseHttpResponse(string userName, HttpResponseMessage response)
+        private async Task<PlayerInfo> ParseHttpResponse(PlayerInfo playerInfo, HttpResponseMessage response)
         {
-            var playerInfo = new PlayerInfo { Name = userName };
-
-            var stream = await response.Content.ReadAsStreamAsync();
+            var stream = await response.Content.ReadAsStreamAsync()
+                .ConfigureAwait(false);
 
             using var reader = new StreamReader(stream);
 
             var properties = typeof(PlayerInfo).GetProperties()
-                .Where(x => new[] { typeof(Activity), typeof(Skill) }.Contains(x.PropertyType));
+                .Where(x => typeof(IPlayerInfoProperty).IsAssignableFrom(x.PropertyType)).ToArray();
 
             if (properties.Count() != TotalLines(reader) && _throwMismatchException)
                 throw new FormatException("Property mismatch; OSRS API Contains more properties than PlayerInfo class. Please contact Repository creator");
@@ -60,6 +70,8 @@ namespace DotnetOsrsApiWrapper
 
                 info.SetValue(playerInfo, property);
             }
+
+            playerInfo.Status = PlayerInfoStatus.Success;
 
             return playerInfo;
         }
