@@ -10,7 +10,7 @@ namespace DotnetOsrsApiWrapper
 {
     public class PlayerInfo
     {
-        //intial states for the Skills/Minigames
+        //initial states for the Skills/Minigames
         private static readonly Skill InitialSkillState = new Skill { Rank = -1, Level = 1, Experience = 1 };
         private static readonly Activity InitialActivityState = new Activity { Rank = -1, Score = -1 };
 
