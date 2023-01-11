@@ -90,6 +90,7 @@ namespace DotnetOsrsApiWrapper
         public Activity Nightmare { get; set; } = InitialActivityState;
         public Activity PhosanisNightmare { get; set; } = InitialActivityState;
         public Activity Obor { get; set; } = InitialActivityState;
+        public Activity PhantomMuspah { get; set; } = InitialActivityState;
         public Activity Sarachnis { get; set; } = InitialActivityState;
         public Activity Scorpia { get; set; } = InitialActivityState;
         public Activity Skotizo { get; set; } = InitialActivityState;
