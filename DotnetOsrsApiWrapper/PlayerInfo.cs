@@ -61,9 +61,11 @@ namespace DotnetOsrsApiWrapper
         //bosses
         public Activity AbyssalSire { get; set; } = InitialActivityState;
         public Activity AlchemicalHydra { get; set; } = InitialActivityState;
+        public Activity Artio { get; set; } = InitialActivityState;
         public Activity BarrowsChests { get; set; } = InitialActivityState;
         public Activity Bryophyta { get; set; } = InitialActivityState;
         public Activity Callisto { get; set; } = InitialActivityState;
+        public Activity Calvarion { get; set; } = InitialActivityState;
         public Activity Cerberus { get; set; } = InitialActivityState;
         public Activity ChambersofXeric { get; set; } = InitialActivityState;
         public Activity ChambersofXericChallengeMode { get; set; } = InitialActivityState;
@@ -94,6 +96,7 @@ namespace DotnetOsrsApiWrapper
         public Activity Sarachnis { get; set; } = InitialActivityState;
         public Activity Scorpia { get; set; } = InitialActivityState;
         public Activity Skotizo { get; set; } = InitialActivityState;
+        public Activity Spindel { get; set; } = InitialActivityState;
         public Activity Tempoross { get; set; } = InitialActivityState;
         public Activity Gauntlet { get; set; } = InitialActivityState;
         public Activity CorruptedGauntlet { get; set; } = InitialActivityState;
