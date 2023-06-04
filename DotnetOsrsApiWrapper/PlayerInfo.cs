@@ -46,6 +46,8 @@ namespace DotnetOsrsApiWrapper
         public Activity LeaguePoints { get; set; } = InitialActivityState;
         public Activity BountyHunterRogues { get; set; } = InitialActivityState;
         public Activity BountyHunter { get; set; } = InitialActivityState;
+        public Activity LegacyBountyHunterRogues { get; set; } = InitialActivityState;
+        public Activity LegacyBountyHunter { get; set; } = InitialActivityState;
         public Activity TotalCluesScrolls { get; set; } = InitialActivityState;
         public Activity BeginnerClueScrolls { get; set; } = InitialActivityState;
         public Activity EasyClueScrolls { get; set; } = InitialActivityState;
